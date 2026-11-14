@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     footballDataApiKey: process.env.NUXT_FOOTBALL_DATA_API_KEY || '91999d1b67784f0a86353fe9ee3c3371',
-    openFootApiKey: process.env.NUXT_OPENFOOT_API_KEY_PAID || 'of_demo_openfootapi_docs',
+    openFootApiKey: process.env.NUXT_OPENFOOT_API_KEY_0 || 'of_demo_openfootapi_docs',
     public: {}
   },
   compatibilityDate: '2025-07-15',
