@@ -20,7 +20,7 @@ npm run test:unit
 
 ## Project Setup
 
-Make sure to install dependencies:
+Install dependencies:
 
 ```bash
 # npm
