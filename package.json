@@ -7,7 +7,10 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "test:unit": "vitest --project unit",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@nuxt/a11y": "^1.0.0-alpha.1",
@@ -36,5 +39,11 @@
     "typescript": "^7.0.2",
     "vue": "^3.5.45",
     "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "@nuxt/test-utils": "^4.4.0",
+    "@vue/test-utils": "^2.6.0",
+    "happy-dom": "^21.0.4",
+    "vitest": "^5.1.1"
   }
 }

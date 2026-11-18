@@ -9,6 +9,12 @@ Empty <a> or <button> → red dotted border
 Invalid links (href="#" or missing) → red outline
 <html> without lang → red border
 
+## Unit Testing
+
+npm i -D @nuxt/test-utils vitest @vue/test-utils happy-dom
+
+
+
 ## Project Setup
 
 Make sure to install dependencies:
