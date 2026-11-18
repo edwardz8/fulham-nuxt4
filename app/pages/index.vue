@@ -5,8 +5,8 @@
       <UContainer class="py-6">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900">Premier League Squads</h1>
-            <p class="text-sm text-gray-500 mt-0.5">Explore player galleries</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900">Premier League Clubs</h1>
+            <p class="text-sm text-gray-500 mt-0.5">Explore English Football Clubs</p>
           </div>
          <!--  <UButton to="/calculator" variant="ghost" size="sm" icon="i-lucide-calculator">
             Calculator
