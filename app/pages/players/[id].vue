@@ -1,11 +1,12 @@
 <template>
   <UContainer class="py-8 max-w-3xl">
-    <UButton to="/" variant="ghost" icon="i-lucide-arrow-left" class="mb-6">
-      Back to squad
+    <UButton :to="backLink" variant="soft" color="neutral" icon="i-lucide-arrow-left" class="mb-6">
+      Back to club
     </UButton>
 
-    <div v-if="pending" class="flex justify-center py-20">
-      <UIcon name="i-lucide-loader-2" class="size-8 animate-spin" />
+    <div v-if="pending" class="flex flex-col items-center justify-center py-32 gap-6">
+      <UProgress v-model="progressValue" class="w-64" />
+      <p class="text-sm text-gray-500">Loading player…</p>
     </div>
 
     <div v-else-if="error" class="text-center text-red-500">
@@ -15,7 +16,8 @@
     <div v-else-if="player" class="space-y-8">
       <!-- Header -->
       <div class="flex items-start gap-6">
-        <div class="size-32 shrink-0 rounded-2xl bg-gradient-to-br from-red-700 to-slate-800 flex items-center justify-center text-4xl font-bold text-white">
+        <div
+          class="size-32 shrink-0 rounded-2xl bg-gradient-to-br from-slate-200 to-slate-800 flex items-center justify-center text-4xl font-bold text-white">
           {{ getInitials(player.name) }}
         </div>
 
@@ -77,7 +79,8 @@
           <h2 class="font-semibold">Player Info</h2>
         </template>
         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
-          <div v-for="(value, key) in extraFields" :key="key" class="flex justify-between border-b border-gray-100 py-1">
+          <div v-for="(value, key) in extraFields" :key="key"
+            class="flex justify-between border-b border-gray-100 py-1">
             <dt class="text-gray-500 capitalize">{{ key }}</dt>
             <dd class="font-medium">{{ value }}</dd>
           </div>
@@ -90,6 +93,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const { data, pending, error } = await useFetch(`/api/player/${route.params.id}`)
+const progressValue = ref(null)
 
 const player = computed(() => data.value?.player)
 const stats = computed(() => data.value?.stats)
@@ -101,6 +105,12 @@ const extraFields = computed(() => {
   return Object.fromEntries(
     Object.entries(rest).filter(([_, v]) => v && typeof v !== 'object')
   )
+})
+
+const backLink = computed(() => {
+  const teamName = data.value?.team?.name?.toLowerCase() || ''
+  if (teamName.includes('leeds')) return '/leeds'
+  return '/fulham'
 })
 
 function getInitials(name: string) {
