@@ -13,7 +13,10 @@ Invalid links (href="#" or missing) → red outline
 
 npm i -D @nuxt/test-utils vitest @vue/test-utils happy-dom
 
-
+```bash
+# npm
+npm run test:unit
+```
 
 ## Project Setup
 
