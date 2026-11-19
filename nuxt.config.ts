@@ -10,6 +10,17 @@ export default defineNuxtConfig({
     openFootApiKey: process.env.NUXT_OPENFOOT_API_KEY_0 || 'of_demo_openfootapi_docs',
     public: {}
   },
+  app: {
+    head: {
+      meta: [
+        { property: 'og:title', content: 'English Football Squads' },
+        { property: 'og:description', content: 'Explore English Football squads and news.' },
+        { property: 'og:image', content: 'https://eplstats.vercel.app/palmer.jpg' },
+        { property: 'og:type', content: 'website' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+      ]
+    }
+  },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   ui: {
