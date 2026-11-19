@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/a11y', '@nuxt/test-utils/module', '@vercel/analytics'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/a11y', '@nuxt/test-utils/module'],
   css: [
   '~/assets/css/main.css',
   ...(process.env.NODE_ENV === 'development' ? ['~/assets/css/a11y.css'] : [])
