@@ -1,20 +1,34 @@
 <template>
     <UContainer class="py-8">
         <div class="mb-10 text-center">
+            <div class="flex items-center gap-3 mb-3">
             <h1 class="text-4xl font-bold tracking-tight">Fulham FC</h1>
-            <p class="mt-2 text-lg text-gray-500">Squad · 2025/26</p>
+                <img src="https://upload.wikimedia.org/wikipedia/en/e/eb/Fulham_FC_%28shield%29.svg" alt="Fulham" class="h-8 w-8 object-contain" />
+                <p class="mt-2 text-lg text-gray-500">Squad · 2026/27</p>
+            </div>
         </div>
 
-        <div v-if="pending" class="flex flex-col items-center justify-center py-32 gap-6">
-            <UProgress v-model="progressValue" class="w-64" />
-            <p class="text-sm text-gray-500">Loading club...</p>
+        <!-- Upcoming fixtures -->
+        <div class="mb-10">
+            <h3 class="text-xl font-semibold mb-4">Upcoming Fixtures</h3>
+            <div v-if="fixturesPending" class="flex justify-center py-8">
+                <UProgress v-model="progressValue" class="w-48" />
+            </div>
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <UCard v-for="fix in fixtures" :key="fix.id" class="text-center">
+                    <p class="text-xs text-gray-500">{{ formatDate(fix.kickoff) }}</p>
+                    <p class="font-semibold mt-1">{{ fix.home }}</p>
+                    <p class="text-sm text-gray-400 my-1">vs</p>
+                    <p class="font-semibold">{{ fix.away }}</p>
+                </UCard>
+            </div>
         </div>
 
-        <div v-else-if="error" class="text-center text-red-500 py-10">
-            Failed to load squad.
+        <div>
+            <h3 class="text-xl font-semibold mb-4">Squad Members</h3>
         </div>
 
-        <div v-else class="masonry">
+        <div class="masonry">
             <NuxtLink v-for="player in players" :key="player.id || player.playerId || player.name"
                 :to="`/players/${getPlayerId(player)}`" class="block mb-4">
                 <div
@@ -65,6 +79,7 @@
 
 <script setup lang="ts">
 const { data, pending, error } = await useFetch('/api/fulham')
+const { data: fixtures, pending: fixturesPending } = await useFetch('/api/fixtures/fulham')
 const progressValue = ref(null)
 
 const players = computed(() => {
@@ -92,12 +107,10 @@ function getInitials(name: string) {
         .toUpperCase() || '?'
 }
 
-// Temporary debug — remove later
-watch(players, (list) => {
-    if (list.length) {
-        console.log('First player object:', list[0])
-    }
-}, { immediate: true })
+function formatDate(iso: string) {
+    if (!iso) return ''
+    return new Date(iso).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+}
 </script>
 
 <style scoped>

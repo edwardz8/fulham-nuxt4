@@ -1,28 +1,38 @@
 <template>
     <UContainer class="py-8">
+
         <div class="mb-10 text-center">
+            <div class="flex items-center gap-3 mb-3">
             <h1 class="text-4xl font-bold tracking-tight">Leeds United</h1>
-            <p class="mt-2 text-lg text-gray-500">Squad · 2025/26</p>
+                <img src="https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg" alt="Tottenham" class="h-8 w-8 object-contain" />
+                <p class="mt-2 text-lg text-gray-500">Squad · 2026/27</p>
+            </div>
         </div>
 
-        <div v-if="pending" class="flex justify-center py-20">
-            <UIcon name="i-lucide-loader-2" class="size-8 animate-spin" />
+        <!-- Upcoming fixtures -->
+        <div class="mb-10">
+            <h2 class="text-xl font-semibold mb-4">Upcoming Fixtures</h2>
+            <div v-if="fixturesPending" class="flex justify-center py-8">
+                <UProgress v-model="progressValue" class="w-48" />
+            </div>
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <UCard v-for="fix in fixtures" :key="fix.id" class="text-center">
+                    <p class="text-xs text-gray-500">{{ formatDate(fix.kickoff) }}</p>
+                    <p class="font-semibold mt-1">{{ fix.home }}</p>
+                    <p class="text-sm text-gray-400 my-1">vs</p>
+                    <p class="font-semibold">{{ fix.away }}</p>
+                </UCard>
+            </div>
         </div>
-
-        <div v-else-if="error" class="text-center text-red-500 py-10">
-            Failed to load squad.
+        
+        <div>
+            <h3 class="text-xl font-semibold mb-4">Squad Members</h3>
         </div>
-
-        <div v-else class="masonry">
-            <NuxtLink
-                v-for="player in players"
-                :key="player.id || player.playerId || player.name"
-                :to="`/players/${getPlayerId(player)}`"
-                class="block mb-4"
-            >
+        <div class="masonry">
+            <NuxtLink v-for="player in players" :key="player.id || player.playerId || player.name"
+                :to="`/players/${getPlayerId(player)}`" class="block mb-4">
                 <div
-                    class="group rounded-2xl overflow-hidden border border-gray-200/80 bg-white hover:border-yellow-500 hover:shadow-xl transition-all duration-200"
-                >
+                    class="group rounded-2xl overflow-hidden border border-gray-200/80 bg-white hover:border-yellow-500 hover:shadow-xl transition-all duration-200">
                     <!-- Leeds accent -->
                     <div class="h-1.5 bg-gradient-to-r from-yellow-400 to-blue-900" />
 
@@ -30,8 +40,7 @@
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <h3
-                                    class="font-semibold text-lg leading-tight text-gray-900 group-hover:text-blue-900 transition-colors"
-                                >
+                                    class="font-semibold text-lg leading-tight text-gray-900 group-hover:text-blue-900 transition-colors">
                                     {{ player.name }}
                                 </h3>
                                 <p class="text-sm text-gray-500 mt-1 capitalize">
@@ -39,13 +48,8 @@
                                 </p>
                             </div>
 
-                            <UBadge
-                                v-if="player.jerseyNumber || player.number"
-                                color="neutral"
-                                variant="subtle"
-                                size="sm"
-                                class="shrink-0"
-                            >
+                            <UBadge v-if="player.jerseyNumber || player.number" color="neutral" variant="subtle"
+                                size="sm" class="shrink-0">
                                 #{{ player.jerseyNumber || player.number }}
                             </UBadge>
                         </div>
@@ -74,7 +78,14 @@
 </template>
 
 <script setup lang="ts">
+const progressValue = ref(null)
+const { data: fixtures, pending: fixturesPending } = await useFetch('/api/fixtures/leeds')
 const { data, pending, error } = await useFetch('/api/leeds')
+
+function formatDate(iso: string) {
+  if (!iso) return ''
+  return new Date(iso).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+}
 
 const players = computed(() => {
     const squad = data.value?.squad

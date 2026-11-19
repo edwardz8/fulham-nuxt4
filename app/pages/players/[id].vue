@@ -9,10 +9,6 @@
       <p class="text-sm text-gray-500">Loading player…</p>
     </div>
 
-    <div v-else-if="error" class="text-center text-red-500">
-      Could not load player.
-    </div>
-
     <div v-else-if="player" class="space-y-8">
       <!-- Header -->
       <div class="flex items-start gap-6">
@@ -110,6 +106,7 @@ const extraFields = computed(() => {
 const backLink = computed(() => {
   const teamName = data.value?.team?.name?.toLowerCase() || ''
   if (teamName.includes('leeds')) return '/leeds'
+  if (teamName.includes('tottenham') || teamName.includes('spurs')) return '/tottenham'
   return '/fulham'
 })
 

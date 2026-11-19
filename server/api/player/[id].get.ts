@@ -5,14 +5,16 @@ export default defineEventHandler(async (event) => {
   }
 
   // Fetch both squads
-  const [fulhamData, leedsData] = await Promise.all([
+  const [fulhamData, leedsData, tottenhamData] = await Promise.all([
     $fetch('/api/fulham').catch(() => ({ squad: [], scorers: [], team: null })),
-    $fetch('/api/leeds').catch(() => ({ squad: [], scorers: [], team: null }))
+    $fetch('/api/leeds').catch(() => ({ squad: [], scorers: [], team: null })),
+    $fetch('/api/tottenham').catch(() => ({ squad: [], scorers: [], team: null }))
   ]) as any[]
 
   const allPlayers = [
     ...(fulhamData.squad || []),
-    ...(leedsData.squad || [])
+    ...(leedsData.squad || []),
+    ...(tottenhamData.squad || []),
   ]
 
   const player = allPlayers.find((p: any) =>
@@ -25,7 +27,8 @@ export default defineEventHandler(async (event) => {
 
   const allScorers = [
     ...(fulhamData.scorers || []),
-    ...(leedsData.scorers || [])
+    ...(leedsData.scorers || []),
+    ...(tottenhamData.scorers || [])
   ]
 
   const scorer = allScorers.find((s: any) =>
@@ -40,9 +43,17 @@ export default defineEventHandler(async (event) => {
     p.id === id || p.playerId === id || String(p.id) === id
   )
 
+  const isTottenham = (tottenhamData.squad || []).some((p: any) =>
+    p.id === id || p.playerId === id || String(p.id) === id
+  )
+
+  let team = fulhamData.team
+  if (isLeeds) team = leedsData.team
+  if (isTottenham) team = tottenhamData.team
+
   return {
     player,
     stats: scorer || null,
-    team: isLeeds ? leedsData.team : fulhamData.team
+    team
   }
 })
